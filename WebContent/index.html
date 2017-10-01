@@ -10,9 +10,11 @@
 <h1>Hi</h1>
 <div id="demo">nothing here</div>
 <div id="demo2">nothing here either</div>
-<input name="response">
-<button id="button1">Ajax This</button>
-
+<div>
+  [<span id="questionNumber">#</span>]
+  <span id="question">Question</span>:&nbsp;<input name="response">
+  <button id="button1">Ajax This</button>
+</div>
 
 <script>
 
@@ -25,7 +27,7 @@ function jax() {
     }
   };
   var sUserTypedResponse = ".restart";
-  var sURL = `http://localhost:8080/Flashcardquiz-java/FlashcardsServlet?json=json&response=${sUserTypedResponse}`;
+  var sURL = `http://localhost:8080/Flashcardquiz-java/do?type=json&app=quiz&response=${sUserTypedResponse}`;
   xhttp.open("GET", sURL, true);
   xhttp.send();
 }
@@ -38,6 +40,9 @@ function processAjaxObject(ajaxObject) {
   var textNode = document.createTextNode(sServerResponse);
   ptag.appendChild(textNode);
   responseArea.appendChild(ptag);
+  
+  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
+  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
 }
 
 document.getElementById("button1").addEventListener("click", jax);

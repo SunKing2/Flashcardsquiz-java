@@ -5,10 +5,15 @@ import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
 public class DoHandler {
+	
+	// TODO inject me with DI
+	private AppHandler appHandler = new QuizAppHandler();
 
 	// TODO hardcoding a directory name, fix!
 	private static final String WEB_CONTENT_DIRECTORY = "/home/louie/Documents/prog/workspace2017/Flashcardquiz-java/WebContent/";
 
+	// normally a requestMap is <String, String[]> but 
+	// you need to convert it before calling me!
 	public String process(Map<String, String> requestMap) {
 		String sReturn = "<html><body><h1>Hi! defaults are good! :)</h1></body></html>";
 		
@@ -34,6 +39,10 @@ public class DoHandler {
 	
 	private String processJSON(Map<String, String> requestMap) {
 		String sReturn = "{ \"serverString\" : \"correct\" }";
+		String sApp = requestMap.get("app");
+		if (sApp != null && sApp.length() > 1) {
+			sReturn = appHandler.processJSON(requestMap);
+		}
 		return sReturn;
 	}
 	private String processText(Map<String, String> requestMap) {
