@@ -6,6 +6,9 @@ import static java.nio.file.Paths.get;
 
 public class DoHandler {
 
+	// TODO hardcoding a directory name, fix!
+	private static final String WEB_CONTENT_DIRECTORY = "/home/louie/Documents/prog/workspace2017/Flashcardquiz-java/WebContent/";
+
 	public String process(Map<String, String> requestMap) {
 		String sReturn = "<html><body><h1>Hi! defaults are good! :)</h1></body></html>";
 		
@@ -50,6 +53,7 @@ public class DoHandler {
 	private String readFile(String fileName) {
 		String sReturn = "<html><body><h1>No such file! :(</h1></body></html>";
 		try {
+			fileName = WEB_CONTENT_DIRECTORY + fileName;
 			sReturn = new String(readAllBytes(get(fileName)));
 		}
 		catch (Exception exc) {
