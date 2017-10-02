@@ -1,4 +1,4 @@
-package mystuff;
+package notused;
 
 import java.util.Map;
 

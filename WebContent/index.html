@@ -5,20 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+      #divQuiz {
+        font-family: monospace;
+        visibility: hidden;
+      }
+      button {
+        font-family: cursive;
+      }
+
+      #butStartQuiz {
+        display: block;
+        margin: 0px auto;
+        font-size: larger;
+      }
+
+      #butSubmit {
+        margin-left: 10px;
+      }
+
+      #divHistory {
+        background-color: pink;
+      }
+      
+      #divHistory p {
+        margin-top: 6px;
+        margin-bottom: 6px;
+      }
+
+  </style>
 </head>
 <body>
-<h1>Hi</h1>
-<div id="demo">nothing here</div>
-<div id="demo2">nothing here either</div>
-<div>
-  [<span id="questionNumber">#</span>]
-  <span id="question">Question</span>:&nbsp;<input name="response">
-  <button id="button1">Ajax This</button>
-</div>
+  <div>
+    <button id="butStartQuiz">Start Quiz</button>
+  </div>
+  <div id="divQuiz">
+    <div id="divHistory"><p>hi</p></div>
+    <div class="questionAndAnswer">
+      <div id="divQuestionLine">
+        <span id="questionPrompt">[<span id="questionNumber">1</span>] <span id="question">IQS</span>:
+      </span><input id="userResponse" name="userResponse" value="qi"></input><button id="butSubmit">Submit</button>
+      </div>
+      <div id="responseLine">Correct.  (1 d:16-11)</div>
+    </div>
+  </div>
+
 
 <script>
 
 function jax() {
+  document.getElementById('butSubmit').style.visibility = 'hidden'
+
+  // save node for input element so we can delete it later
+  var oldQuestionLine = document.getElementById("divQuestionLine");
+  // cloneNode with true means all children
+  //var cloneQuestionLine = oldQuestionLine.cloneNode(true);
+
+  var divHistory = document.getElementById("divHistory");
+  var questionPromptText = document.getElementById("questionPrompt").textContent;
+  var responseText = document.getElementById("userResponse").value;
+  var newHistoryLineText = questionPromptText + " " + responseText;
+  addTextToElementWithId("divHistory", newHistoryLineText);
+
+  // add server's response to that question
+
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -32,20 +82,37 @@ function jax() {
   xhttp.send();
 }
 
-function processAjaxObject(ajaxObject) {
-  var sServerResponse = ajaxObject.serverString;
-  
-  var responseArea = document.getElementById("demo");
+function addTextToElementWithId(elementId, text) {
   var ptag = document.createElement("p");
-  var textNode = document.createTextNode(sServerResponse);
+  var textNode = document.createTextNode(text);
   ptag.appendChild(textNode);
-  responseArea.appendChild(ptag);
-  
-  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
-  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
+  document.getElementById(elementId).appendChild(ptag);
 }
 
-document.getElementById("button1").addEventListener("click", jax);
+function processAjaxObject(ajaxObject) {
+
+  // server returns a string, we'll add this to the history div
+  var sServerResponse = ajaxObject.serverString;
+  addTextToElementWithId("divHistory", sServerResponse);
+
+  // server returned new question, so show it
+  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
+  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
+
+  // ready for more input, so unhide submit button
+  document.getElementById('butSubmit').style.visibility = 'visible'
+}
+
+function butStartQuiz() {
+  document.getElementById('quiz').style.visibility = 'visible';
+}
+
+document.getElementById("butSubmit").addEventListener("click", jax);
+
+document.getElementById('butStartQuiz').addEventListener('click', () => {
+  document.getElementById('butStartQuiz').style.display = 'none';
+  document.getElementById('divQuiz').style.visibility = 'visible'
+});
 
 </script>
 </body>
