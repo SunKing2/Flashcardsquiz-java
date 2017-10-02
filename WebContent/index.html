@@ -10,7 +10,7 @@
         font-family: monospace;
         visibility: hidden;
       }
-      button {
+      #butStartQuiz, #butSubmit {
         font-family: cursive;
       }
 
@@ -21,7 +21,6 @@
       }
 
       #butSubmit {
-        margin-left: 10px;
       }
 
       #divHistory {
@@ -45,14 +44,13 @@
     <button id="butStartQuiz">Start Quiz</button>
   </div>
   <div id="divQuiz">
-    <div id="divHistory"><p>Let's do a quiz!</p></div>
-    <div class="questionAndAnswer">
-      <div id="divQuestionLine">
-        <span id="questionPrompt">[<span id="questionNumber"></span>] <span id="question"></span>:
-      </span><input id="userResponse" name="userResponse" value=""></input><button id="butSubmit">Submit</button>
-      </div>
-      <div id="responseLine">Correct.  (1 d:16-11)</div>
-    </div>
+    <div id="divHistory"></div>
+    <form action="#" onsubmit="jaxForGuessAnswer();return false;">
+	    <div id="divQuestionLine">
+	      <span id="questionPrompt">[<span id="questionNumber"></span>] <span id="question"></span>:
+	    </span><input id="userResponse" name="userResponse" value=""></input><input type="submit" id="butSubmit"></input>
+	    </div>
+	</form>
   </div>
 
 
@@ -88,7 +86,6 @@ function ajax(additionalQuery) {
 }
 
 function processAjaxObject(ajaxObject) {
-
   // server returns a string, we'll add this to the history div
   var sServerResponse = ajaxObject.serverString;
 
@@ -109,6 +106,8 @@ function processAjaxObject(ajaxObject) {
 	  // server returned new question, so show it
 	  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
 	  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
+	  userResponse.value = "";
+	  document.getElementById("userResponse").focus();
   }
 
   // did the server send programEnded: "true" 
@@ -116,7 +115,10 @@ function processAjaxObject(ajaxObject) {
 	  addTextToElementWithId("divHistory", "All done. Bye!");
 	  
 	  // hide the prompt stuff, since there's no more prompting
+	  document.getElementById('divQuestionLine').style.visibility = 'hidden';
 	  
+	  // show the start quiz button, again
+	  document.getElementById('butStartQuiz').style.display = 'block';
   }
   else {
     // ready for more input, so unhide submit button
@@ -138,11 +140,16 @@ function addTextToElementWithId(elementId, text) {
   }
 }
 
-document.getElementById("butSubmit").addEventListener("click", jaxForGuessAnswer);
-
 document.getElementById('butStartQuiz').addEventListener('click', () => {
   document.getElementById('butStartQuiz').style.display = 'none';
   document.getElementById('divQuiz').style.visibility = 'visible';
+  
+  // if this is a restart, the question prompt is hidden, show it!
+  document.getElementById('divQuestionLine').style.visibility = 'visible';
+  
+  // if this is a restart, there's stuff in divHistory, clear it!
+  document.getElementById("divHistory").innerHTML = "<p>Let's do a quiz</p>";
+
   jaxForStartNewQuiz();
 });
 
