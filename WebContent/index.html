@@ -26,6 +26,11 @@
 
       #divHistory {
         background-color: pink;
+        float:left;
+		width:100%;
+		overflow-y: auto;
+		height: 267px;
+		padding-bottom: 20px;
       }
       
       #divHistory p {
@@ -40,11 +45,11 @@
     <button id="butStartQuiz">Start Quiz</button>
   </div>
   <div id="divQuiz">
-    <div id="divHistory"><p>hi</p></div>
+    <div id="divHistory"><p>Let's do a quiz!</p></div>
     <div class="questionAndAnswer">
       <div id="divQuestionLine">
-        <span id="questionPrompt">[<span id="questionNumber">1</span>] <span id="question">IQS</span>:
-      </span><input id="userResponse" name="userResponse" value="qi"></input><button id="butSubmit">Submit</button>
+        <span id="questionPrompt">[<span id="questionNumber"></span>] <span id="question"></span>:
+      </span><input id="userResponse" name="userResponse" value=""></input><button id="butSubmit">Submit</button>
       </div>
       <div id="responseLine">Correct.  (1 d:16-11)</div>
     </div>
@@ -53,15 +58,19 @@
 
 <script>
 
-function jax() {
+function jaxForStartNewQuiz() {
+	ajax("command=start");
+}
+
+function jaxForGuessAnswer() {
+	ajax("command=guess");
+}
+
+// takes a string in the format "command=start"
+function ajax(additionalQuery) {
   document.getElementById('butSubmit').style.visibility = 'hidden'
 
-  // save node for input element so we can delete it later
   var oldQuestionLine = document.getElementById("divQuestionLine");
-  // cloneNode with true means all children
-  //var cloneQuestionLine = oldQuestionLine.cloneNode(true);
-
-  var divHistory = document.getElementById("divHistory");
   var questionPromptText = document.getElementById("questionPrompt").textContent;
   var responseText = document.getElementById("userResponse").value;
   var newHistoryLineText = questionPromptText + " " + responseText;
@@ -76,17 +85,29 @@ function jax() {
       processAjaxObject(myobj);
     }
   };
-  var sUserTypedResponse = ".restart";
+  var sUserTypedResponse = document.getElementById("userResponse").value;
+  
   var sURL = `http://localhost:8080/Flashcardquiz-java/do?type=json&app=quiz&response=${sUserTypedResponse}`;
+  if (additionalQuery) {
+	  sURL += "&" + additionalQuery;
+  }
   xhttp.open("GET", sURL, true);
   xhttp.send();
 }
 
 function addTextToElementWithId(elementId, text) {
+  var container = document.getElementById(elementId);
   var ptag = document.createElement("p");
   var textNode = document.createTextNode(text);
   ptag.appendChild(textNode);
-  document.getElementById(elementId).appendChild(ptag);
+  
+  // div does not scroll automatically so make it scroll
+  var shouldScroll = (container.scrollTop + container.clientHeight === container.scrollHeight);
+  container.appendChild(ptag);
+  if (!shouldScroll) {
+	  container.scrollTop = container.scrollHeight;
+  }
+  //}
 }
 
 function processAjaxObject(ajaxObject) {
@@ -103,15 +124,12 @@ function processAjaxObject(ajaxObject) {
   document.getElementById('butSubmit').style.visibility = 'visible'
 }
 
-function butStartQuiz() {
-  document.getElementById('quiz').style.visibility = 'visible';
-}
-
-document.getElementById("butSubmit").addEventListener("click", jax);
+document.getElementById("butSubmit").addEventListener("click", jaxForGuessAnswer);
 
 document.getElementById('butStartQuiz').addEventListener('click', () => {
   document.getElementById('butStartQuiz').style.display = 'none';
-  document.getElementById('divQuiz').style.visibility = 'visible'
+  document.getElementById('divQuiz').style.visibility = 'visible';
+  jaxForStartNewQuiz();
 });
 
 </script>

@@ -2,12 +2,14 @@ package mystuff;
 
 public class QuizResponse {
 	public int nextQuestionNumber;
-	public String serverString;
+	public int questionsRemaining;
 	public String nextQuestion;
+	public String serverString;
 	
-	QuizResponse(int qn, String s, String n) {
+	QuizResponse(int qn, int qr, String nq, String serverString) {
 		this.nextQuestionNumber = qn;
-		this.serverString = s;
-		this.nextQuestion = n;
+		this.questionsRemaining = qr;
+		this.nextQuestion = nq;
+		this.serverString = serverString;
 	}
 }

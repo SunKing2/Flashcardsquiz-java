@@ -14,6 +14,11 @@ public class QuizAppHandler implements AppHandler {
 	public String processJSON(Map<String, String> requestMap) {
 		String sReturn = "{ \"serverString\" : \"correct\" }";
 		
+		if (requestMap.get("command") != null &&
+				requestMap.get("command").equals("start")) {
+			currentQuestion = 0;
+		}
+		
 		sReturn = fakeJSON(currentQuestion);
 
 		currentQuestion++;
@@ -27,7 +32,10 @@ public class QuizAppHandler implements AppHandler {
 		String sReturn = "{ \"serverString\" : \"correct\" }";
 		try {
 			String sCorrect = questionNumber %2 == 0 ? "correct" : "wrong";
-			QuizResponse qr = new QuizResponse(currentQuestion + 1, sCorrect, questions[currentQuestion+1]);
+			if (questionNumber == 0) {
+				sCorrect = "Welcome!";
+			}
+			QuizResponse qr = new QuizResponse(currentQuestion+1, 3 - currentQuestion, questions[currentQuestion], sCorrect);
 			sReturn = new ObjectMapper().writeValueAsString(qr);
 		}
 		catch (Exception exc) {
