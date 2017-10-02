@@ -22,8 +22,9 @@ public class QuizAppHandler implements AppHandler {
 		sReturn = fakeJSON(currentQuestion);
 
 		currentQuestion++;
-		if (currentQuestion > 3) {
-			currentQuestion = 0;
+		if (currentQuestion > 4) {
+			currentQuestion = -1;
+			sReturn = "{\"serverString\": \"correct\", \"programEnded\": \"true\", \"guessResponse\" : \"true\"}";
 		}
 		
 		return sReturn;
@@ -35,12 +36,12 @@ public class QuizAppHandler implements AppHandler {
 			if (questionNumber == 0) {
 				sCorrect = "Welcome!";
 			}
-			QuizResponse qr = new QuizResponse(currentQuestion+1, 3 - currentQuestion, questions[currentQuestion], sCorrect);
+			Boolean guessResponse = questionNumber > 0;
+			QuizResponse qr = new QuizResponse(currentQuestion+1, 3 - currentQuestion, questions[currentQuestion], sCorrect, guessResponse.toString());
 			sReturn = new ObjectMapper().writeValueAsString(qr);
 		}
 		catch (Exception exc) {
 			System.out.println("QuizAppHandler.fakeJSON:" + exc);
-			currentQuestion = 0;
 		}
 		return sReturn;
 	}

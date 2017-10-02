@@ -70,14 +70,6 @@ function jaxForGuessAnswer() {
 function ajax(additionalQuery) {
   document.getElementById('butSubmit').style.visibility = 'hidden'
 
-  var oldQuestionLine = document.getElementById("divQuestionLine");
-  var questionPromptText = document.getElementById("questionPrompt").textContent;
-  var responseText = document.getElementById("userResponse").value;
-  var newHistoryLineText = questionPromptText + " " + responseText;
-  addTextToElementWithId("divHistory", newHistoryLineText);
-
-  // add server's response to that question
-
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
@@ -95,6 +87,43 @@ function ajax(additionalQuery) {
   xhttp.send();
 }
 
+function processAjaxObject(ajaxObject) {
+
+  // server returns a string, we'll add this to the history div
+  var sServerResponse = ajaxObject.serverString;
+
+  if (ajaxObject.guessResponse && ajaxObject.guessResponse == "true") {
+      // add the question just asked to divHistory
+      var oldQuestionLine = document.getElementById("divQuestionLine");
+      var questionPromptText = document.getElementById("questionPrompt").textContent;
+      var responseText = document.getElementById("userResponse").value;
+      var newHistoryLineText = questionPromptText + " " + responseText;
+      addTextToElementWithId("divHistory", newHistoryLineText);
+  }
+  
+  addTextToElementWithId("divHistory", sServerResponse);
+
+  // does the server have a new question to show?
+  // nextQuestion: "aqt"
+  if (ajaxObject.nextQuestion) {
+	  // server returned new question, so show it
+	  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
+	  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
+  }
+
+  // did the server send programEnded: "true" 
+  if (ajaxObject.programEnded) {
+	  addTextToElementWithId("divHistory", "All done. Bye!");
+	  
+	  // hide the prompt stuff, since there's no more prompting
+	  
+  }
+  else {
+    // ready for more input, so unhide submit button
+	document.getElementById('butSubmit').style.visibility = 'visible'
+  }
+}
+
 function addTextToElementWithId(elementId, text) {
   var container = document.getElementById(elementId);
   var ptag = document.createElement("p");
@@ -105,23 +134,8 @@ function addTextToElementWithId(elementId, text) {
   var shouldScroll = (container.scrollTop + container.clientHeight === container.scrollHeight);
   container.appendChild(ptag);
   if (!shouldScroll) {
-	  container.scrollTop = container.scrollHeight;
+      container.scrollTop = container.scrollHeight;
   }
-  //}
-}
-
-function processAjaxObject(ajaxObject) {
-
-  // server returns a string, we'll add this to the history div
-  var sServerResponse = ajaxObject.serverString;
-  addTextToElementWithId("divHistory", sServerResponse);
-
-  // server returned new question, so show it
-  document.getElementById("question").innerHTML = ajaxObject.nextQuestion;
-  document.getElementById("questionNumber").innerHTML = ajaxObject.nextQuestionNumber;
-
-  // ready for more input, so unhide submit button
-  document.getElementById('butSubmit').style.visibility = 'visible'
 }
 
 document.getElementById("butSubmit").addEventListener("click", jaxForGuessAnswer);
