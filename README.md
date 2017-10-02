@@ -8,18 +8,17 @@
 </head>
 <body>
 
-<pre>
-Using a web browser, the user visits a site with the intention of completing a flashcard quiz.  (Currently localhost).
+<p>Using a web browser, the user visits a site with the intention of completing a flashcard quiz.  (Currently localhost).</p>
 
-The user presses a button to start a quiz.  This begins the prompting of quiz questions. Pressing Enter or the Submit button causes the server to evaluate the question through JSON/Ajax.  
+<p>The user presses a button to start a quiz.  This begins the prompting of quiz questions. Pressing Enter or the Submit button causes the server to evaluate the question through JSON/Ajax. </p> 
 
-The server runs a program that simulates a quiz, it has no data storage, and all data is hardcoded.  This release doesn't evaluate the questions and answers correctly, it just fakes it, and produces a hardwired correct/incorrect response.
+<p>The server runs a program that simulates a quiz, it has no data storage, and all data is hardcoded.  This release doesn't evaluate the questions and answers correctly, it just fakes it, and produces a hardwired correct/incorrect response</p>.
 
-Quiz shows 5 questions, when done, allows the user to restart the quiz. 
+<p>Quiz shows 5 questions, when done, allows the user to restart the quiz.</p> 
 
-This all takes place on a single HTML page, all interactions dynamically update the HTML and, and submit triggers AJAX.
+<p>This all takes place on a single HTML page, all interactions dynamically update the HTML and, and submit triggers AJAX.</p>
 
-</pre>
+<h3>A run in the browser:</h3>
 
   <pre>
 Let's do a quiz
@@ -35,6 +34,8 @@ correct
 All done. Bye!
   </pre>
 
+
+<h3>Requests sent from browser/ JSON returned from server</h3>
 
 <div style="margin-top: 50px;">
 <pre>
