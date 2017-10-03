@@ -8,7 +8,7 @@ public class QuizAppHandler implements AppHandler {
 
 	private int currentQuestion = 0;
 	private String[] questions = {"aqt", "acr", "bgo", "cow"};
-	private String[] answers   = {"qat", "car", "bog", "cow"};
+	//private String[] answers   = {"qat", "car", "bog", "cow"};
 
 	@Override
 	public String processJSON(Map<String, String> requestMap) {
@@ -24,7 +24,7 @@ public class QuizAppHandler implements AppHandler {
 		currentQuestion++;
 		if (currentQuestion > 4) {
 			currentQuestion = -1;
-			sReturn = "{\"serverString\": \"correct\", \"programEnded\": \"true\", \"guessResponse\" : \"true\"}";
+			sReturn = "{\"guessResponse\": \"correct\", \"programEnded\": \"true\"}";
 		}
 		
 		return sReturn;
@@ -32,12 +32,13 @@ public class QuizAppHandler implements AppHandler {
 	private String fakeJSON(int questionNumber) {
 		String sReturn = "{ \"serverString\" : \"correct\" }";
 		try {
-			String sCorrect = questionNumber %2 == 0 ? "correct" : "wrong";
+			String guessResponse = questionNumber %2 == 0 ? "correct" : "wrong";
+			String serverString = "";
 			if (questionNumber == 0) {
-				sCorrect = "Welcome!";
+				serverString = "Welcome!";
+				guessResponse = "";
 			}
-			Boolean guessResponse = questionNumber > 0;
-			QuizResponse qr = new QuizResponse(currentQuestion+1, 3 - currentQuestion, questions[currentQuestion], sCorrect, guessResponse.toString());
+			QuizResponse qr = new QuizResponse(currentQuestion+1, 3 - currentQuestion, questions[currentQuestion], serverString, guessResponse);
 			sReturn = new ObjectMapper().writeValueAsString(qr);
 		}
 		catch (Exception exc) {
