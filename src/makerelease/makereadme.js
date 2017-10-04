@@ -1,6 +1,19 @@
 
 
-let myheader = `<p>Using a web browser, the user visits a site with the intention of completing a flashcard quiz.  (Currently localhost).</p>
+let myheader = `<p>$ git clone https://github.com/SunKing2/Flashcardsquiz-java.git</p>
+
+<p>To run without Eclipse IDE, move Flashcardsquiz-java.war to Tomcat 9's CATALINA_HOME/webapps, where CATALINA_HOME is the top location where Tomcat is installed.</p>
+
+<p>Startup Tomcat, then point browser to http://localhost:8080/Flashcardsquiz-java/</p>
+
+<hr>
+<p>Eclipse users can just open this as an eclipse project, right click on the project name, click run as/ run on server, and choose Tomcat9</p>
+
+<p>Ensure you point your (Chrome) browser at http://localhost:8080/Flashcardsquiz-java/, the browser built into Eclipse won't work</p>
+
+</hr>
+
+<p>Using a web browser, the user visits a site with the intention of completing a flashcard quiz.  (Currently localhost).</p>
 
 <p>The user presses a button to start a quiz.  This begins the prompting of quiz questions. Pressing Enter or the Submit button causes the server to evaluate the question through JSON/Ajax. </p> 
 
