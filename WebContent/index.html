@@ -80,8 +80,7 @@ function ajax(additionalQuery) {
   };
   var sUserTypedResponse = document.getElementById("userResponse").value;
 
-//  var sURL = `http://localhost:8080/Flashcardquiz-java/do?type=json&app=quiz&response=${sUserTypedResponse}`;
-  var sURL = "/Flashcardquiz-java/do?"
+  var sURL = "/Flashcardsquiz-java/do?"
   sURL += makeQueryStringFromForm();
   xhttp.open("GET", sURL, true);
   xhttp.send();
