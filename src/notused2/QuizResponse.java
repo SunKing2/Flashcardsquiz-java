@@ -1,4 +1,4 @@
-package mystuff;
+package notused2;
 
 public class QuizResponse {
 	public int nextQuestionNumber;

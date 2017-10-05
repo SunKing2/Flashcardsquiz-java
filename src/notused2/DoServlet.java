@@ -1,4 +1,4 @@
-package mystuff;
+package notused2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet({ "/DoServlet", "/do" })
+@WebServlet({ "/DoServlet", "/doold" })
 public class DoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
